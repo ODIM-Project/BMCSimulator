@@ -23,7 +23,7 @@ buildscript {
     ext {
         kotlin_version = '1.4.30'
         kotlin_coroutines_core_version = '1.4.2'
-        javalin_version = '3.13.4'
+        javalin_version = '3.13.11'
         jackson_version = '2.12.1'
         testng_version = '7.4.0'
         detekt_version = '1.15.0'
@@ -34,7 +34,7 @@ buildscript {
         mockk_version = '1.10.6'
         logback_version = '1.2.3'
         spring_data_commons_version = '2.4.5'
-        spring_web_version = '5.3.4'
+        spring_web_version = '5.3.9'
         spring_context_version = '5.3.4'
         mockito_kotlin_version = '2.2.0'
         http_client_version = '4.5.13'
