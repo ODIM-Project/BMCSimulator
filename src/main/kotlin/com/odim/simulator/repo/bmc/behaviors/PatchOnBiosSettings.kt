@@ -26,13 +26,15 @@ import com.odim.simulator.http.Response.Companion.badRequest
 import com.odim.simulator.http.Response.Companion.success
 import com.odim.simulator.tree.ResourceTree
 import com.odim.simulator.tree.structure.Item
+import com.odim.utils.getObject
 import com.odim.utils.getString
 
 class PatchOnBiosSettings : Behavior {
     override fun run(tree: ResourceTree, item: Item, request: Request, response: Response, dataStore: BehaviorDataStore) =
         try {
             val updatedSettings: MutableMap<String, Int> = mutableMapOf()
-            request.json!!.fieldNames().forEach { updatedSettings[it] = request.json!!.getString(it).toInt() }
+            request.json!!.getObject("Attributes").fieldNames()
+                .forEach { updatedSettings[it] = request.json!!.getObject("Attributes").getString(it).toInt() }
             dataStore.insert(BIOS_SETTINGS, updatedSettings)?.let {
                 (it as MutableMap<String, Int>).putAll(updatedSettings)
             }

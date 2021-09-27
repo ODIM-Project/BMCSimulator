@@ -35,6 +35,7 @@ import com.odim.simulator.tree.structure.Resource
 import com.odim.simulator.tree.structure.ResourceObject
 import com.odim.simulator.tree.structure.ResourceType.COMPUTER_SYSTEM
 import com.odim.simulator.tree.templates.bmc.BmcVersion.Companion.BMC_VERSION_LATEST
+import com.odim.utils.getObject
 import org.testng.Assert
 import org.testng.Assert.assertEquals
 import org.testng.annotations.BeforeMethod
@@ -114,20 +115,23 @@ class BiosSettingUpdateTest {
 
     private fun verifyBiosAttributes(json: ObjectNode, assert: (Any?, Any?) -> Unit) {
         val biosAttributes = bios.data["Attributes"] as ResourceObject
-        json.fieldNames().iterator().forEach { key ->
+        json.getObject("Attributes").fieldNames().iterator().forEach { key ->
             assertEquals(biosAttributes.containsKey(key), true)
             biosAttributes[key]?.let {
-                assert(it, json[key].toString().toInt())
+                assert(it, json.getObject("Attributes")[key].toString().toInt())
             }
         }
     }
 
     private fun createBiosAttributesJson(): ObjectNode {
         return makeJson {
-            "QuietBoot" to nextInt(10, 100)
-            "IB1_PXE" to nextInt(10, 100)
-            "MmiohBase" to nextInt(10, 100)
-        }
+            "Attributes" to
+                    {
+                        "QuietBoot" to nextInt(10, 100)
+                        "IB1_PXE" to nextInt(10, 100)
+                        "MmiohBase" to nextInt(10, 100)
+                    }
+            }
     }
 
     private fun createResetJson(type: String): String {
