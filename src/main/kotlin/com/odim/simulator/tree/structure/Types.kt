@@ -245,7 +245,7 @@ enum class ResourceCollectionType(
     VCAT_ENTRIES_COLLECTION("VCATEntry", VCAT_ENTRY, "VCATEntries"),
 
     //Added
-    FIRMWARE_INVENTORIES_COLLECTION("FirmwareInventoryCollection", SOFTWARE_INVENTORY, "FirmwareInventory");
+    FIRMWARE_INVENTORIES_COLLECTION("SoftwareInventoryCollection", SOFTWARE_INVENTORY, "FirmwareInventory");
 
     override fun oDataType() = this.odataTypeValue
 
