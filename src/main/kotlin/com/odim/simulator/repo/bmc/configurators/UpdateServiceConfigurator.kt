@@ -17,12 +17,15 @@
 package com.odim.simulator.repo.bmc.configurators
 
 import com.odim.simulator.dsl.DSL
-import com.odim.simulator.tree.structure.*
+import com.odim.simulator.tree.structure.ActionOem
 import com.odim.simulator.tree.structure.ActionType.UPDATE_BIOS
 import com.odim.simulator.tree.structure.ActionType.UPDATE_BIOS_BACKUP
 import com.odim.simulator.tree.structure.ActionType.UPDATE_BMC
 import com.odim.simulator.tree.structure.ActionType.UPDATE_ME
 import com.odim.simulator.tree.structure.ActionType.UPDATE_SDR
+import com.odim.simulator.tree.structure.Actions
+import com.odim.simulator.tree.structure.Resource
+import com.odim.simulator.tree.structure.ResourceCollection
 
 class UpdateServiceConfigurator private constructor() {
     companion object Factory {
