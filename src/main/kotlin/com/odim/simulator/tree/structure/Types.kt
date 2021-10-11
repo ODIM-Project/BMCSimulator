@@ -242,10 +242,7 @@ enum class ResourceCollectionType(
     SECURE_BOOT_DATABASES_COLLECTION("SecureBootDatabaseCollection", SECURE_BOOT_DATABASE, "SecureBootDatabases"),
     SIGNATURES_COLLECTION("SecureBootDatabaseCollection", SIGNATURE, "SecureBootDatabases"),
     STORAGE_CONTROLLERS_COLLECTION("StorageControllerCollection", STORAGE_CONTROLLER, "StorageControllers"),
-    VCAT_ENTRIES_COLLECTION("VCATEntry", VCAT_ENTRY, "VCATEntries"),
-
-    //Added
-    FIRMWARE_INVENTORIES_COLLECTION("SoftwareInventoryCollection", SOFTWARE_INVENTORY, "FirmwareInventory");
+    VCAT_ENTRIES_COLLECTION("VCATEntry", VCAT_ENTRY, "VCATEntries");
 
     override fun oDataType() = this.odataTypeValue
 
