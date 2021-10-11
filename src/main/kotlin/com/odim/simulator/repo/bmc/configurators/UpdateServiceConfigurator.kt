@@ -25,12 +25,13 @@ import com.odim.simulator.tree.structure.ActionType.UPDATE_ME
 import com.odim.simulator.tree.structure.ActionType.UPDATE_SDR
 import com.odim.simulator.tree.structure.Actions
 import com.odim.simulator.tree.structure.Resource
+import com.odim.simulator.tree.structure.ResourceCollection
 
 class UpdateServiceConfigurator private constructor() {
     companion object Factory {
         fun configureUpdateService(updateService: Resource, baseSoftwareInventories: List<Resource>) {
 
-            val softwareInventoryBMC = configureServiceInventory(baseSoftwareInventories[0], "BMC") {
+            val firmwareInventoryBMC = configureServiceInventory(baseSoftwareInventories[0], "BMC") {
                 "Oem" to {
                     "@odata.type" to "#CustomCompany.Oem.SoftwareInventory"
                     "UpdateState" to "Idle"
@@ -38,19 +39,20 @@ class UpdateServiceConfigurator private constructor() {
                 }
             }
 
-            val softwareInventoryBIOS = configureServiceInventory(baseSoftwareInventories[1], "BIOS") {
+            val firmwareInventoryBIOS = configureServiceInventory(baseSoftwareInventories[1], "BIOS") {
+                "Description" to "Server BIOS"
                 "Oem" to {
                     "@odata.type" to "#CustomCompany.Oem.SoftwareInventory"
                 }
             }
 
-            val softwareInventoryME = configureServiceInventory(baseSoftwareInventories[2], "ME") {
+            val firmwareInventoryME = configureServiceInventory(baseSoftwareInventories[2], "ME") {
                 "Oem" to {
                     "@odata.type" to "#CustomCompany.Oem.SoftwareInventory"
                 }
             }
 
-            val softwareInventorySDR = configureServiceInventory(baseSoftwareInventories[3], "SDR") {
+            val firmwareInventorySDR = configureServiceInventory(baseSoftwareInventories[3], "SDR") {
                 "Oem" to {
                     "@odata.type" to "#CustomCompany.Oem.SoftwareInventory"
                     "UpdateState" to "SDR is uploaded"
@@ -58,18 +60,27 @@ class UpdateServiceConfigurator private constructor() {
 
             }
 
-            updateService(softwareInventoryBMC, softwareInventoryBIOS, softwareInventoryME, softwareInventorySDR)
+            val softwareInventoryCheckers = configureServiceInventory(baseSoftwareInventories[4], "Checkers") {
+                "Name" to "Contoso Super Chceckers"
+                "Oem" to {
+                    "@odata.type" to "#CustomCompany.Oem.SoftwareInventory"
+                }
+            }
+           
+            updateService.traverse<ResourceCollection>("SoftwareInventory").add(softwareInventoryCheckers)
+            updateService.traverse<ResourceCollection>("FirmwareInventory").add(firmwareInventoryBIOS)
+                .add(firmwareInventoryBMC).add(firmwareInventorySDR).add(firmwareInventoryME)
 
             val updateBiosBackup = object : ActionOem(UPDATE_BIOS_BACKUP) {
                 override fun toLink(): String {
                     return "${this.parent!!.toLink()}/Actions/Oem/Intel.Oem.${UPDATE_BIOS.actionName}/?imageflag=Backup"
                 }
             }
-            softwareInventoryBMC.traverse<Actions>("Actions").addAction(ActionOem(UPDATE_BMC), softwareInventoryBMC)
-            softwareInventoryBIOS.traverse<Actions>("Actions").addAction(ActionOem(UPDATE_BIOS), softwareInventoryBIOS)
-            softwareInventoryBIOS.traverse<Actions>("Actions").addAction(updateBiosBackup, softwareInventoryBIOS)
-            softwareInventoryME.traverse<Actions>("Actions").addAction(ActionOem(UPDATE_ME), softwareInventoryME)
-            softwareInventorySDR.traverse<Actions>("Actions").addAction(ActionOem(UPDATE_SDR), softwareInventorySDR)
+            firmwareInventoryBMC.traverse<Actions>("Actions").addAction(ActionOem(UPDATE_BMC), firmwareInventoryBMC)
+            firmwareInventoryBIOS.traverse<Actions>("Actions").addAction(ActionOem(UPDATE_BIOS), firmwareInventoryBIOS)
+            firmwareInventoryBIOS.traverse<Actions>("Actions").addAction(updateBiosBackup, firmwareInventoryBIOS)
+            firmwareInventoryME.traverse<Actions>("Actions").addAction(ActionOem(UPDATE_ME), firmwareInventoryME)
+            firmwareInventorySDR.traverse<Actions>("Actions").addAction(ActionOem(UPDATE_SDR), firmwareInventorySDR)
         }
 
         private fun configureServiceInventory(softwareInventory: Resource, id: String, additionalParameters: DSL.() -> Unit): Resource {
