@@ -37,9 +37,9 @@ class SetDefaultBootOrder : Behavior {
         (system.parent as Resource) {
             "Boot" to {
                 "BootOrder" to array[
-                        "Boot000S",
-                        "Boot000D",
-                        "Boot000G"
+                        "Boot000A",
+                        "Boot000B",
+                        "Boot000C"
                 ]
         }
     }
