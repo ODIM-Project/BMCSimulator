@@ -26,6 +26,7 @@ import com.odim.simulator.http.Response
 import com.odim.simulator.http.Response.Companion.success
 import com.odim.simulator.tree.ResourceTree
 import com.odim.simulator.tree.structure.Item
+import com.odim.utils.getArray
 import com.odim.utils.getObject
 import com.odim.utils.getString
 
@@ -54,6 +55,14 @@ class PatchOnComputerSystem : Behavior {
             val bootSourceModeValue = bootNode.getString("BootSourceOverrideMode")
             if (!modeAllowableValues.contains(bootSourceModeValue)) {
                 return terminal(Response.badRequest("Value for BootSourceOverrideMode is not valid"))
+            }
+        }
+        if (bootNode.has("BootOrder")) {
+            val bootOrderValues = bootNode.getArray("BootOrder")
+            for (value in bootOrderValues) {
+                if (!value.toString().contains("Boot")) {
+                    return terminal(Response.badRequest("Values for BootOrder is not valid"))
+                }
             }
         }
         return nonTerminal(success())
