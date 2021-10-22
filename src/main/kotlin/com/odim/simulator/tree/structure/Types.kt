@@ -451,7 +451,6 @@ enum class ActionType(val actionName: String) {
     SECURE_ERASE("SecureErase"),
     SECURE_ERASE_UNIT("SecureEraseUnit"),
     SET_DEFAULT_BOOT_ORDER("SetDefaultBootOrder"),
-
     SET_ENCRYPTION_KEY("SetEncryptionKey"),
     SET_PASSPHRASE("SetPassphrase"),
     SIMPLE_UPDATE("SimpleUpdate"),
