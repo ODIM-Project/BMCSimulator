@@ -118,6 +118,7 @@ import com.odim.simulator.tree.structure.ResourceType.VOLTAGE
 import com.odim.simulator.tree.structure.ResourceType.VOLUME
 import com.odim.simulator.tree.structure.TreeElement
 import com.odim.simulator.tree.templates.bmc.BmcVersion.BMC_1_0
+import com.odim.utils.BootOrder
 import io.javalin.core.security.BasicAuthCredentials
 import java.util.UUID.randomUUID
 
@@ -155,11 +156,7 @@ class BMCSimulator(val resourceVersion: ResourceVersion = BMC_1_0,
         "SKU" to "R2208WFTZS"
         "BiosVersion" to "SE5C620.86B.02.01.0008.03192019-20201559"
         "Boot" to {
-            "BootOrder" to array[
-                    "Boot000A",
-                    "Boot000B",
-                    "Boot000C"
-            ]
+            "BootOrder" to array[BootOrder]
             "BootSourceOverrideEnabled" to "Disabled"
             "BootSourceOverrideTarget" to "None"
             "BootSourceOverrideMode" to "Legacy"

@@ -26,6 +26,7 @@ import com.odim.simulator.tree.ResourceTree
 import com.odim.simulator.tree.structure.Action
 import com.odim.simulator.tree.structure.Item
 import com.odim.simulator.tree.structure.Resource
+import com.odim.utils.BootOrder
 
 class SetDefaultBootOrder : Behavior {
     override fun run(tree: ResourceTree, item: Item, request: Request, response: Response, dataStore: BehaviorDataStore): BehaviorResponse {
@@ -36,12 +37,8 @@ class SetDefaultBootOrder : Behavior {
     private fun setDefaultBootOrder(system: Resource) {
         system {
             "Boot" to {
-                "BootOrder" to array[
-                        "Boot000A",
-                        "Boot000B",
-                        "Boot000C"
-                ]
+                "BootOrder" to array[BootOrder]
+            }
         }
-    }
     }
 }
