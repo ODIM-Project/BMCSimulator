@@ -16,4 +16,4 @@
 
 package com.odim.utils
 
-val bootOrder = arrayListOf("Boot000A","Boot000B","Boot000C")
+val systemDefaultBootOrder = arrayListOf("Boot000A","Boot000B","Boot000C")
