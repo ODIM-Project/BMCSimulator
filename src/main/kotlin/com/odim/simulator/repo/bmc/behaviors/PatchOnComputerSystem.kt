@@ -23,9 +23,11 @@ import com.odim.simulator.behaviors.BehaviorResponse.Companion.nonTerminal
 import com.odim.simulator.behaviors.BehaviorResponse.Companion.terminal
 import com.odim.simulator.http.Request
 import com.odim.simulator.http.Response
+import com.odim.simulator.http.Response.Companion.badRequest
 import com.odim.simulator.http.Response.Companion.success
 import com.odim.simulator.tree.ResourceTree
 import com.odim.simulator.tree.structure.Item
+import com.odim.utils.getArray
 import com.odim.utils.getObject
 import com.odim.utils.getString
 
@@ -36,24 +38,32 @@ class PatchOnComputerSystem : Behavior {
         val enabledAllowableValues = listOf("Disabled", "Once", "Continuous")
         val modeAllowableValues = listOf("Legacy", "UEFI")
 
-        val bootNode = request.json?.getObject("Boot") ?: return terminal(Response.badRequest("Boot not found"))
+        val bootNode = request.json?.getObject("Boot") ?: return terminal(badRequest("Boot not found"))
 
         if (bootNode.has("BootSourceOverrideTarget")) {
             val bootSourceTargetValue = bootNode.getString("BootSourceOverrideTarget")
             if (!targetAllowableValues.contains(bootSourceTargetValue)) {
-                return terminal(Response.badRequest("Value for BootSourceOverrideTarget is not valid"))
+                return terminal(badRequest("Value for BootSourceOverrideTarget is not valid"))
             }
         }
         if (bootNode.has("BootSourceOverrideEnabled")) {
             val bootSourceEnabledValue = bootNode.getString("BootSourceOverrideEnabled")
             if (!enabledAllowableValues.contains(bootSourceEnabledValue)) {
-                return terminal(Response.badRequest("Value for BootSourceOverrideEnabled is not valid"))
+                return terminal(badRequest("Value for BootSourceOverrideEnabled is not valid"))
             }
         }
         if (bootNode.has("BootSourceOverrideMode")) {
             val bootSourceModeValue = bootNode.getString("BootSourceOverrideMode")
             if (!modeAllowableValues.contains(bootSourceModeValue)) {
-                return terminal(Response.badRequest("Value for BootSourceOverrideMode is not valid"))
+                return terminal(badRequest("Value for BootSourceOverrideMode is not valid"))
+            }
+        }
+        if (bootNode.has("BootOrder")) {
+            val bootOrderValues = bootNode.getArray("BootOrder")
+            for (value in bootOrderValues) {
+                if (!value.toString().contains("Boot")) {
+                    return terminal(badRequest("Values for BootOrder is not valid"))
+                }
             }
         }
         return nonTerminal(success())

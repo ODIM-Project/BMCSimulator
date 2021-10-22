@@ -49,6 +49,7 @@ import com.odim.simulator.repo.bmc.behaviors.PostOnFirmwareUpdate
 import com.odim.simulator.repo.bmc.behaviors.PostOnSimpleUpdate
 import com.odim.simulator.repo.bmc.behaviors.ProcessorMetrics
 import com.odim.simulator.repo.bmc.behaviors.ResetOnSystem
+import com.odim.simulator.repo.bmc.behaviors.SetDefaultBootOrder
 import com.odim.simulator.repo.bmc.behaviors.SetSuccessfulMessageResponse
 import com.odim.simulator.repo.bmc.configurators.AccountServiceConfigurator.Factory.configureAccountService
 import com.odim.simulator.repo.bmc.configurators.ChassisConfigurator.Factory.appendPower
@@ -66,6 +67,7 @@ import com.odim.simulator.tree.ResourceTree
 import com.odim.simulator.tree.ResourceVersion
 import com.odim.simulator.tree.structure.ActionElement
 import com.odim.simulator.tree.structure.ActionType.RESET
+import com.odim.simulator.tree.structure.ActionType.SET_DEFAULT_BOOT_ORDER
 import com.odim.simulator.tree.structure.ActionType.SIMPLE_UPDATE
 import com.odim.simulator.tree.structure.ActionType.UPDATE_BIOS
 import com.odim.simulator.tree.structure.ActionType.UPDATE_BMC
@@ -116,6 +118,7 @@ import com.odim.simulator.tree.structure.ResourceType.VOLTAGE
 import com.odim.simulator.tree.structure.ResourceType.VOLUME
 import com.odim.simulator.tree.structure.TreeElement
 import com.odim.simulator.tree.templates.bmc.BmcVersion.BMC_1_0
+import com.odim.utils.systemDefaultBootOrder
 import io.javalin.core.security.BasicAuthCredentials
 import java.util.UUID.randomUUID
 
@@ -153,6 +156,7 @@ class BMCSimulator(val resourceVersion: ResourceVersion = BMC_1_0,
         "SKU" to "R2208WFTZS"
         "BiosVersion" to "SE5C620.86B.02.01.0008.03192019-20201559"
         "Boot" to {
+            "BootOrder" to array[systemDefaultBootOrder]
             "BootSourceOverrideEnabled" to "Disabled"
             "BootSourceOverrideTarget" to "None"
             "BootSourceOverrideMode" to "Legacy"
@@ -316,6 +320,7 @@ class BMCSimulator(val resourceVersion: ResourceVersion = BMC_1_0,
         behaviors.appendActionBehavior(UPDATE_SDR, POST, PostOnFirmwareUpdate(logServiceForSystem, manager))
         behaviors.appendActionBehavior(SIMPLE_UPDATE, POST, PostOnSimpleUpdate())
         behaviors.prependBehavior(COMPUTER_SYSTEM, PATCH, PatchOnComputerSystem())
+        behaviors.appendActionBehavior(SET_DEFAULT_BOOT_ORDER, POST, SetDefaultBootOrder())
         behaviors.appendBehavior(COMPUTER_SYSTEM, PATCH, SetSuccessfulMessageResponse())
         behaviors.appendBehavior(CHASSIS, PATCH, SetSuccessfulMessageResponse())
 
