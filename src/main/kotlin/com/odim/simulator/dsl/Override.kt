@@ -89,6 +89,15 @@ class DSL {
         return ARRAY
     }
 
+    operator fun get(list: List<String>): Marker {
+        val resultArray = ArrayNode()
+        list.forEach {
+            resultArray.add(PrimitiveNode(it))
+        }
+        valueStack.addLast(resultArray)
+        return ARRAY
+    }
+
     private fun wrapSequenceItemsIntoArray(items: Sequence<Any?>, target: ArrayNode) = wrapItemsIntoArray(
             items.filterNotNullTo(mutableListOf()).toTypedArray(), target)
 
