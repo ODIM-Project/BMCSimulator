@@ -89,6 +89,11 @@ class DSL {
         return ARRAY
     }
 
+    operator fun get(list: List<String>): Marker {
+        valueStack.addLast(ArrayNode(list.map { i -> PrimitiveNode(i) }))
+        return ARRAY
+    }
+
     private fun wrapSequenceItemsIntoArray(items: Sequence<Any?>, target: ArrayNode) = wrapItemsIntoArray(
             items.filterNotNullTo(mutableListOf()).toTypedArray(), target)
 
