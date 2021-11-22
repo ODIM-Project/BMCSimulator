@@ -90,11 +90,7 @@ class DSL {
     }
 
     operator fun get(list: List<String>): Marker {
-        val resultArray = ArrayNode()
-        list.forEach {
-            resultArray.add(PrimitiveNode(it))
-        }
-        valueStack.addLast(resultArray)
+        valueStack.addLast(ArrayNode(list.map { i -> PrimitiveNode(i) }))
         return ARRAY
     }
 
