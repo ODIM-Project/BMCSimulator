@@ -19,6 +19,7 @@ package com.odim.simulator.repo.bmc.behaviors
 import com.odim.simulator.behaviors.Behavior
 import com.odim.simulator.behaviors.BehaviorDataStore
 import com.odim.simulator.behaviors.BehaviorDataStore.SharedInformationType.BIOS_SETTINGS
+import com.odim.simulator.behaviors.BehaviorResponse.Companion.terminal
 import com.odim.simulator.behaviors.BehaviorResponse.Companion.nonTerminal
 import com.odim.simulator.http.Request
 import com.odim.simulator.http.Response
@@ -34,7 +35,12 @@ class PatchOnBiosSettings : Behavior {
         try {
             val updatedSettings: MutableMap<String, Int> = mutableMapOf()
             request.json!!.getObject("Attributes").fieldNames()
-                .forEach { updatedSettings[it] = request.json!!.getObject("Attributes").getString(it).toInt() }
+                .forEach {  val value = request.json!!.getObject("Attributes").getString(it).toInt()
+                if (value >= 0){
+                    updatedSettings[it] = value
+                } else {
+                    return terminal(badRequest("Values for BiosSettings is not valid"))
+                }}
             dataStore.insert(BIOS_SETTINGS, updatedSettings)?.let {
                 (it as MutableMap<String, Int>).putAll(updatedSettings)
             }
