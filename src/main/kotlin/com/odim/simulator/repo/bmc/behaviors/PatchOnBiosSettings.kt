@@ -39,7 +39,7 @@ class PatchOnBiosSettings : Behavior {
                 if (value >= 0){
                     updatedSettings[it] = value
                 } else {
-                    return terminal(badRequest("Values for BiosSettings is not valid"))
+                    return terminal(badRequest("Value for parameter $it is not valid; it cannot be negative."))
                 }}
             dataStore.insert(BIOS_SETTINGS, updatedSettings)?.let {
                 (it as MutableMap<String, Int>).putAll(updatedSettings)
